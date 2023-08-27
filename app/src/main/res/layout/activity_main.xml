@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="16dp"
+  tools:context=".ui.main.MainActivity">
+
+  <!-- TODO (2 points): Convert to ConstraintLayout -->
+  <!-- TODO (1 point): Address Android Studio warnings -->
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+      android:id="@+id/main_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/my_random_user"
+      android:textAppearance="?textAppearanceHeadline4" />
+
+    <LinearLayout
+      android:id="@+id/main_selected_card"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/main_title"
+      android:layout_marginTop="8dp">
+
+      <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+          android:id="@+id/main_image"
+          android:layout_width="100dp"
+          android:layout_height="100dp"
+          android:background="#33aaaaaa" />
+
+      </FrameLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView
+            android:id="@+id/main_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name:"
+            android:textAppearance="?textAppearanceBody2"
+            android:textStyle="bold" />
+
+          <TextView
+            android:id="@+id/main_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="?textAppearanceBody2"
+            tools:text="Jon" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+          <TextView
+            android:id="@+id/main_email_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:textAppearance="?textAppearanceBody2"
+            android:textStyle="bold" />
+
+          <TextView
+            android:id="@+id/main_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAppearance="?textAppearanceBody2"
+            tools:text="robert@test.com" />
+
+        </LinearLayout>
+
+        <Button
+          android:id="@+id/main_see_details_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/view_details" />
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+      android:id="@+id/main_refresh_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/main_selected_card"
+      android:text="Refresh random user" />
+
+    <View
+      android:id="@+id/main_divider"
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:layout_below="@id/main_refresh_button"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:background="#11111111" />
+
+    <Button
+      android:id="@+id/main_user_list_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/main_divider"
+      android:text="Show 10 users" />
+
+    <!-- TODO (5 points): Convert to RecyclerView -->
+    <ListView
+      android:id="@+id/main_user_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/main_user_list_button"
+      android:layout_marginTop="8dp" />
+
+  </RelativeLayout>
+
+</FrameLayout>
