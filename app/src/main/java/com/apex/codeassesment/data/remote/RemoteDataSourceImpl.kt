@@ -1,6 +1,5 @@
 package com.apex.codeassesment.data.remote
 
-import android.util.Log
 import com.apex.codeassesment.data.local.LocalDataSource
 import com.apex.codeassesment.data.model.User
 import com.apex.codeassesment.data.network.ApiService
@@ -28,10 +27,8 @@ class RemoteDataSourceImpl @Inject constructor(
             localDataSource.saveUser(user)
             emit(ApiResult.Success(user))
         } catch (e: HttpException) {
-            Log.e(TAG, "Error $e")
             emit(ApiResult.Error(e))
         } catch (e: IOException) {
-            Log.e(TAG, "IOException $e")
             emit(ApiResult.Error(e))
         }
     }
@@ -44,15 +41,9 @@ class RemoteDataSourceImpl @Inject constructor(
             val response = apiService.getUsersList()
             emit(ApiResult.Success(response.results))
         } catch (e: HttpException) {
-            Log.e(TAG, "Error $e")
             emit(ApiResult.Error(e))
         } catch (e: IOException) {
-            Log.e(TAG, "IOException $e")
             emit(ApiResult.Error(e))
         }
-    }
-
-    companion object {
-        const val TAG = "ApiService"
     }
 }
