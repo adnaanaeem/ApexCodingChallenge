@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.apex.codeassesment.RandomUserApplication
-import com.apex.codeassesment.data.model.User
 import com.apex.codeassesment.ui.details.DetailsActivity
 import com.apex.codeassesment.ui.main.MainViewModel
 import com.apex.codeassesment.ui.main.UiEvent
@@ -35,6 +34,7 @@ class ComposeMainActivity : AppCompatActivity() {
         setContent {
             MainScreen(
                 viewModel.uiState.collectAsState().value,
+                viewModel.userFlowList,
                 onEvent = { eventValue -> viewModel.onEvent(event = eventValue) }
             )
         }
@@ -46,7 +46,6 @@ class ComposeMainActivity : AppCompatActivity() {
                 launch {
                     viewModel.uiEvent.collectLatest { event ->
                         when (event) {
-                            is UiEvent.UpdateList -> Unit
                             // TODO (2 points): Convert to extenstion function.
                             is UiEvent.NavigateToUser -> navigateToActivity<DetailsActivity>(
                                 Constants.SAVED_USER_KEY to event.user,

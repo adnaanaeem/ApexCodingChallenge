@@ -1,6 +1,5 @@
 package com.apex.codeassesment.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apex.codeassesment.data.model.User
@@ -32,11 +31,6 @@ class MainViewModel @Inject constructor(
     val userFlowList: StateFlow<ApiResult<List<User>>> = _userFlowList
 
     init {
-//        _uiState.update {
-//            it.copy(
-//                randomUser = userRepository.getSavedUser(),
-//            )
-//        }
         refreshUser(true)
     }
 
@@ -51,24 +45,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun updateAdapterEvent(list: List<User>) {
-        viewModelScope.launch {
-            _uiEvent.emit(UiEvent.UpdateList(list))
-            _uiState.update {
-                it.copy(
-                    userList = list
-                )
-            }
-        }
-    }
-
     private fun updateUserList() {
         viewModelScope.launch {
             userRepository.getUsers()
                 .onStart { _userFlow.value = ApiResult.Loading("Fetching Users List") }
                 .collect {apiResult ->
                     _userFlowList.value = apiResult
-                    parseUserListData(apiResult)
                 }
         }
     }
@@ -87,7 +69,7 @@ class MainViewModel @Inject constructor(
     private fun parseUserData(result: ApiResult<User>){
         when (result) {
             is ApiResult.Error -> Unit
-            is ApiResult.Loading -> Unit // show progress if needed
+            is ApiResult.Loading -> Unit
             is ApiResult.Success -> {
                 _uiState.update {
                     it.copy(
@@ -97,21 +79,9 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-
-    private fun parseUserListData(result: ApiResult<List<User>>){
-        when (result) {
-            is ApiResult.Error -> Unit
-            is ApiResult.Loading -> Unit // show progress if needed
-            is ApiResult.Success -> {
-                Log.e("Adnan", "parseUserListData ${result.data}")
-                updateAdapterEvent(result.data)
-            }
-        }
-    }
 }
 
 sealed class UiEvent {
-    data class UpdateList(val userList: List<User>) : UiEvent()
     data class NavigateToUser(val user: User) : UiEvent()
     object NavigateToCompose : UiEvent()
 }
@@ -125,5 +95,4 @@ sealed interface MainViewEvent {
 
 data class MainUiState(
     val randomUser: User = User(),
-    val userList: List<User> = emptyList(),
 )

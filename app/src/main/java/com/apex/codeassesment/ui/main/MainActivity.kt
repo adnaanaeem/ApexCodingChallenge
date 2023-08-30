@@ -1,7 +1,7 @@
 package com.apex.codeassesment.ui.main
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.apex.codeassesment.RandomUserApplication
 import com.apex.codeassesment.data.model.User
+import com.apex.codeassesment.data.remote.ApiResult
 import com.apex.codeassesment.databinding.ActivityMainBinding
 import com.apex.codeassesment.ui.adapter.UserAdapter
 import com.apex.codeassesment.ui.details.DetailsActivity
@@ -46,8 +47,6 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnItemClickListener {
         (application as RandomUserApplication).inject(this)
         viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
-        observeState()
-
         with(binding) {
             userAdapter = UserAdapter(mutableListOf(), this@MainActivity)
             binding.mainUserList.adapter = userAdapter
@@ -62,54 +61,53 @@ class MainActivity : AppCompatActivity(), UserAdapter.OnItemClickListener {
             mainRefreshButton.setOnClickListener { viewModel.onEvent(MainViewEvent.RefreshEvent(true)) }
             mainUserListButton.setOnClickListener { viewModel.onEvent(MainViewEvent.UserListEvent) }
             composeScreenButton.setOnClickListener { viewModel.onEvent(MainViewEvent.ComposeScreenEvent) }
+
+            observeState()
         }
     }
 
     private fun observeState() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.uiState.collect { state ->
-                        updateUserDetails(state.randomUser)
-                    }
-                }
-
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 launch {
                     viewModel.uiEvent.collectLatest { event ->
-                        Log.e("Adnan", "collectLatest $event")
                         when (event) {
-                            is UiEvent.UpdateList -> {
-                                Log.e("Adnan", "userAdapter ${event.userList}")
-                                userAdapter.updateUserList(event.userList)
-                            }
-
                             // TODO (2 points): Convert to extenstion function.
                             is UiEvent.NavigateToUser -> navigateToActivity<DetailsActivity>(
                                 Constants.SAVED_USER_KEY to event.user,
                             )
+
                             UiEvent.NavigateToCompose -> navigateToActivity<ComposeMainActivity>()
                         }
                     }
                 }
 
-//                launch {
-//                    viewModel.userFlowList.collect { result ->
-//                        when (result) {
-//                            is ApiResult.Error -> Unit
-//                            is ApiResult.Loading -> Unit // show progress if needed
-//                            is ApiResult.Success -> userAdapter.updateUserList(result.data)
-//                        }
-//                    }
-//                }
-//                launch {
-//                    viewModel.userFlow.collect { result ->
-//                        when (result) {
-//                            is ApiResult.Error -> Unit
-//                            is ApiResult.Loading -> Unit // show progress if needed
-//                            is ApiResult.Success -> updateUserDetails(result.data)
-//                        }
-//                    }
-//                }
+                launch {
+                    viewModel.userFlowList.collect { result ->
+                        when (result) {
+                            is ApiResult.Error -> {
+                                Toast.makeText(this@MainActivity, "Error: ${result.exception}", Toast.LENGTH_LONG).show()
+                            }
+
+                            is ApiResult.Loading -> {
+                                // show Progress if needed
+                            }
+
+                            is ApiResult.Success -> {
+                                userAdapter.updateUserList(result.data)
+                            }
+                        }
+                    }
+                }
+                launch {
+                    viewModel.userFlow.collect { result ->
+                        when (result) {
+                            is ApiResult.Error -> Toast.makeText(this@MainActivity, "Error: ${result.exception}", Toast.LENGTH_LONG).show()
+                            is ApiResult.Loading -> Unit
+                            is ApiResult.Success -> updateUserDetails(result.data)
+                        }
+                    }
+                }
             }
         }
     }
