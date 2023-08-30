@@ -1,0 +1,14 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="user"
+            type="com.apex.codeassesment.data.model.User" />
+    </data>
+    <TextView
+        android:id="@+id/userTv"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text='@{user.name.toString()}'/>
+</layout>

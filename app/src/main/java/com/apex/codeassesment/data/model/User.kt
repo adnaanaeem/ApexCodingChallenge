@@ -5,6 +5,10 @@ import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
+@JsonClass(generateAdapter = true)
+data class UserResponse(
+  val results: List<User>
+)
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class User(

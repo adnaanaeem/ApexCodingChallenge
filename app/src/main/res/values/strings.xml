@@ -11,4 +11,11 @@
     <string name="location_random_user">Location of random user: (%1$s, %2$s)</string>
     <string name="location_phone">Location of this phone: (%1$s, %2$s)</string>
     <string name="location_result_miles">[%f] miles</string>
+    <string name="refresh_random_user">Refresh random user</string>
+    <string name="show_10_users">Show 10 users</string>
+    <string name="email">Email:</string>
+    <string name="name">Name:</string>
+    <string name="location_permission_required">Location permission is required to calculate distance.</string>
+    <string name="couldnt_retrieve_location">Couldn\'t retrieve current location.</string>
+    <string name="compose_screen">Show Compose Screen</string>
 </resources>

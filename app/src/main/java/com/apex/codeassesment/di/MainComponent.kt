@@ -1,21 +1,25 @@
 package com.apex.codeassesment.di
 
 import android.content.Context
+import com.apex.codeassesment.ui.main.compose.ComposeMainActivity
 import com.apex.codeassesment.ui.main.MainActivity
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
-@Component(modules = [MainModule::class])
+@Singleton
+@Component(modules = [MainModule::class, ViewModelModule::class])
 interface MainComponent {
 
-  @Component.Factory
-  interface Factory {
-    fun create(@BindsInstance applicationContext: Context): MainComponent
-  }
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance applicationContext: Context): MainComponent
+    }
 
-  interface Injector {
-    val mainComponent: MainComponent
-  }
+    interface Injector {
+        val mainComponent: MainComponent
+    }
 
-  fun inject(mainActivity: MainActivity)
+    fun inject(mainActivity: MainActivity)
+    fun inject(composeMainActivity: ComposeMainActivity)
 }
